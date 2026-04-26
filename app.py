@@ -42,7 +42,6 @@ def load_quiz_data():
 quiz_data = load_quiz_data()
 
 
-# 미리 정의된 사용자 정보 (딕셔너리 형태)
 user_db = {
     "지우": "1234",
     "이슬": "0000",
@@ -57,7 +56,6 @@ def login_section():
     password = st.text_input("비밀번호:", type="password")
 
     if st.button("로그인"):
-        # 입력한 아이디가 user_db에 있고, 비밀번호도 일치하는지 확인!
         if username in user_db and user_db[username] == password:
             st.session_state.logged_in = True
             st.rerun()
