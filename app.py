@@ -121,6 +121,7 @@ else:
     col1, col2 = st.columns([8, 2])
     with col1:
         st.write("로그인 성공")
+        time.sleep(1)
     with col2:
         if st.button("로그아웃"):
             st.session_state.logged_in = False
