@@ -1,5 +1,5 @@
 import streamlit as st
-
+import time
 
 st.set_page_config(page_title="포켓몬 도감 퀴즈")
 
@@ -42,7 +42,6 @@ def load_quiz_data():
 quiz_data = load_quiz_data()
 
 
-# 미리 정의된 사용자 정보 (딕셔너리 형태)
 user_db = {
     "지우": "1234",
     "이슬": "0000",
@@ -86,7 +85,9 @@ def quiz_section():
 
         if st.button("정답"):
             if user_answer.strip() == current_data["answer"]:
-                st.success("정답입니다! 🎉")
+                st.success("정답입니다! ")
+                time.sleep(1)
+
                 st.session_state.score += 1
                 st.session_state.current_q += 1
                 st.session_state.attempts = 0 
@@ -96,7 +97,8 @@ def quiz_section():
                 if st.session_state.attempts == 1:
                     st.error("오답입니다. 힌트를 확인하고 다시 시도해보세요!")
                 else:
-                    st.error(f"또 오답입니다! 정답은 '{current_data['answer']}' 였습니다. 다음 문제로 넘어갑니다. 😢")
+                    st.error(f"또 오답입니다! 정답은 '{current_data['answer']}' 였습니다. 다음 문제로 넘어갑니다. ")
+                    time.sleep(1)
                     st.session_state.current_q += 1
                     st.session_state.attempts = 0
                 st.rerun()
@@ -118,7 +120,7 @@ if not st.session_state.logged_in:
 else:
     col1, col2 = st.columns([8, 2])
     with col1:
-        st.write("✅ 로그인 성공")
+        st.write("로그인 성공")
     with col2:
         if st.button("로그아웃"):
             st.session_state.logged_in = False
