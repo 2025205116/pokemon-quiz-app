@@ -42,7 +42,6 @@ def load_quiz_data():
 quiz_data = load_quiz_data()
 
 
-# 미리 정의된 사용자 정보 (딕셔너리 형태)
 user_db = {
     "지우": "1234",
     "이슬": "0000",
