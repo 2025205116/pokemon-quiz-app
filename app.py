@@ -4,7 +4,7 @@ import streamlit as st
 st.set_page_config(page_title="포켓몬 도감 퀴즈")
 
 
-st.title("⚡ 포켓몬 도감 퀴즈 앱")
+st.title("포켓몬 도감 퀴즈 앱")
 st.markdown("### 제출자: 2025205116 이재혁") 
 st.markdown("---")
 
