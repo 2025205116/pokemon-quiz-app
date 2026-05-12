@@ -1,13 +1,14 @@
 import streamlit as st
 import time
+from datetime import datetime
+
+print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] --- 스크립트 실행/리렌더링 감지 ---")
 
 st.set_page_config(page_title="포켓몬 도감 퀴즈")
-
 
 st.title("포켓몬 도감 퀴즈 앱")
 st.markdown("### 제출자: 2025205116 이재혁") 
 st.markdown("---")
-
 
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
@@ -17,7 +18,6 @@ if 'score' not in st.session_state:
     st.session_state.score = 0
 if 'attempts' not in st.session_state:
     st.session_state.attempts = 0
-
 
 @st.cache_data
 def load_quiz_data():
@@ -41,7 +41,6 @@ def load_quiz_data():
 
 quiz_data = load_quiz_data()
 
-
 user_db = {
     "지우": "1234",
     "이슬": "0000",
@@ -56,43 +55,42 @@ def login_section():
     password = st.text_input("비밀번호:", type="password")
 
     if st.button("로그인"):
+        print(f"[LOG] 로그인 시도 - 트레이너명: {username}")
         if username in user_db and user_db[username] == password:
             st.session_state.logged_in = True
+            print(f"[LOG] 로그인 성공: {username}")
             st.rerun()
         else:
+            print(f"[LOG] 로그인 실패: {username}")
             st.error("등록되지 않은 트레이너이거나 비밀번호가 틀렸습니다.")
-
 
 def quiz_section():
     st.write(f"총 **{len(quiz_data)}** 개의 문제가 준비되어 있습니다.")
-    
 
     if st.session_state.current_q < len(quiz_data):
         current_data = quiz_data[st.session_state.current_q]
-        
         st.progress((st.session_state.current_q) / len(quiz_data))
         st.markdown(f"### 질문 {st.session_state.current_q + 1}")
-
-      
         st.info(current_data["question"])
 
-    
         if st.session_state.attempts >= 1:
             st.warning(current_data["hint"])
 
-       
         user_answer = st.text_input("정답을 입력하세요:", key=f"q_{st.session_state.current_q}")
 
         if st.button("정답"):
+            print(f"[LOG] 퀴즈 응답 제출 - 질문 {st.session_state.current_q + 1}, 입력값: {user_answer}")
+            
             if user_answer.strip() == current_data["answer"]:
+                print(f"[LOG] 결과: 정답")
                 st.success("정답입니다! ")
                 time.sleep(1)
-
                 st.session_state.score += 1
                 st.session_state.current_q += 1
                 st.session_state.attempts = 0 
                 st.rerun()
             else:
+                print(f"[LOG] 결과: 오답 (시도 횟수: {st.session_state.attempts + 1})")
                 st.session_state.attempts += 1
                 if st.session_state.attempts == 1:
                     st.error("오답입니다. 힌트를 확인하고 다시 시도해보세요!")
@@ -102,18 +100,16 @@ def quiz_section():
                     st.session_state.current_q += 1
                     st.session_state.attempts = 0
                 st.rerun()
-    
-   
     else:
         st.subheader("퀴즈 종료!")
         st.write(f"당신의 최종 점수는 **{st.session_state.score} / {len(quiz_data)}** 점 입니다.")
         
         if st.button("처음부터 다시 풀기"):
+            print("[LOG] 사용자가 퀴즈를 초기화함")
             st.session_state.current_q = 0
             st.session_state.score = 0
             st.session_state.attempts = 0
             st.rerun()
-
 
 if not st.session_state.logged_in:
     login_section()
@@ -123,6 +119,7 @@ else:
         st.write("✅ 로그인 성공")
     with col2:
         if st.button("로그아웃"):
+            print("[LOG] 사용자가 로그아웃함")
             st.session_state.logged_in = False
             st.session_state.current_q = 0
             st.session_state.score = 0
